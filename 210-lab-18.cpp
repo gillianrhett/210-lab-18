@@ -39,8 +39,23 @@ int main() {
     string comment;
     char another = 'y';
     while (another == 'y') {
+        fRating = -1.0;
         cout << "Enter review rating 0-5: ";
+        while (!(0.0 <= fRating && fRating <= 5.0)) {
+            cin >> sRating;
+            try {
+                fRating = stof(sRating);
+            }
+            catch(invalid_argument& e) {
+                fRating = -1.0;
+            }
+            if (!(0.0 <= fRating && fRating <= 5.0))
+                cout << "Enter a number 0.0 - 5.0: ";
+        }
         cout << "Enter review comments: ";
+        cin.clear();
+        cin.ignore();
+        getline(cin, comment);
         if(iChoice == 1)
             push_front(head, fRating, comment);
         else
@@ -50,5 +65,37 @@ int main() {
 
     // After all reviews have been input, traverse the linked list to output the data and calculate/output the average review.
 
+    // delete the list to deallocate the memory
+    // (I know the program is ending anyway but this is good practice)
+    Review* current = head;
+    while (current) {
+        head = current->next;
+        delete current;
+        current = head;
+    }
+    head = nullptr;
+
     return 0;
+}
+
+void push_front(Review* &ptr, float rating, string comment) {
+// TODO add code from example
+}
+
+void push_back(Review* &ptr, float rating, string comment) {
+    if (ptr) { // if the list is not empty
+        // traverse the list to get to the last node
+        Review* current = ptr;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        // make the new node
+        Review* newnode = new Review;
+
+        // link the new node to the end of the list
+        
+    }
+    else {
+
+    }
 }
