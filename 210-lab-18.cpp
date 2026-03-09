@@ -70,15 +70,19 @@ int main() {
     // After all reviews have been input, traverse the linked list to output the data and calculate/output the average review.
     cout << "Outputting all reviews:" << endl;
     Review* eachReview = reviews;
-    int count = 1;
-    float sum = 0;
-    while (eachReview) {
-        cout << "\t> Review #" << count << ": " << eachReview->rating << ": " << eachReview->comment << endl;
-        ++count;
-        sum += eachReview->rating;
-        eachReview = eachReview->next;
+    int count = 0;
+    float sum = 0.0;
+    if (eachReview) { // if the list is not empty, display contents
+        while (eachReview) {
+            cout << "\t> Review #" << count + 1 << ": " << eachReview->rating << ": " << eachReview->comment << endl;
+            ++count;
+            sum += eachReview->rating;
+            eachReview = eachReview->next;
+        }
+        cout << "\t> Average: " << fixed << setprecision(5) << sum / count << endl;
     }
-    cout << "\t> Average: " << fixed << setprecision(5) << sum / count << endl;
+    else
+        cout << "There are no reviews to display." << endl;
 
     // delete the list to deallocate the memory
     // (I know the program is ending anyway but this is good practice)
@@ -93,8 +97,20 @@ int main() {
     return 0;
 }
 
-void push_front(Review* &ptr, float rating, string comment) {
-// TODO add code from example
+void push_front(Review* &head, float rating, string comment) {
+    // make the new node
+    Review* newnode = new Review;
+    newnode->rating = rating;
+    newnode->comment = comment;
+    newnode->next = nullptr;
+    
+    if (head) { // if the list is not empty, prepend the new node
+        newnode->next = head;
+        head = newnode;
+    }
+    else { // newnode will be the first node
+        head = newnode;
+    }
 }
 
 void push_back(Review* &head, float rating, string comment) {
@@ -103,6 +119,7 @@ void push_back(Review* &head, float rating, string comment) {
     newnode->rating = rating;
     newnode->comment = comment;
     newnode->next = nullptr;
+    
     if (head) { // if the list is not empty
         // traverse the list to get to the last node
         Review* current = head;
