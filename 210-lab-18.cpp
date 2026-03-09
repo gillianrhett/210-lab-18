@@ -74,12 +74,12 @@ int main() {
     float sum = 0.0;
     if (eachReview) { // if the list is not empty, display contents
         while (eachReview) {
-            cout << "\t> Review #" << count + 1 << ": " << eachReview->rating << ": " << eachReview->comment << endl;
+            cout << fixed << setprecision(2) << "\t> Review #" << count + 1 << ": " << eachReview->rating << ": " << eachReview->comment << endl;
             ++count;
             sum += eachReview->rating;
             eachReview = eachReview->next;
         }
-        cout << "\t> Average: " << fixed << setprecision(5) << sum / count << endl;
+        cout << "\t> Average: " << fixed << setprecision(2) << sum / count << endl;
     }
     else
         cout << "There are no reviews to display." << endl;
