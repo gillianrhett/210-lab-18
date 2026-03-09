@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
+#include <limits>
 #include <iomanip>
 
 using namespace std;
@@ -38,8 +40,8 @@ int main() {
     string sRating;
     float fRating;
     string comment;
-    char another = 'y';
-    while (another == 'y') {
+    char another = 'Y';
+    while (another == 'Y' || another == 'y') {
         fRating = -1.0;
         cout << "Enter review rating 0-5: ";
         while (!(0.0 <= fRating && fRating <= 5.0)) {
@@ -49,19 +51,20 @@ int main() {
             }
             catch(invalid_argument& e) {
                 fRating = -1.0;
+                cin.clear();
             }
             if (!(0.0 <= fRating && fRating <= 5.0))
                 cout << "Enter a number 0.0 - 5.0: ";
         }
         cout << "Enter review comments: ";
-        cin.clear();
-        cin.ignore();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(cin, comment);
         if(iChoice == 1)
             push_front(reviews, fRating, comment);
         else
             push_back(reviews, fRating, comment);
         cout << "Enter another review? Y/N: ";
+        cin >> another;
     }
 
     // After all reviews have been input, traverse the linked list to output the data and calculate/output the average review.
@@ -73,6 +76,7 @@ int main() {
         cout << "\t> Review #" << count << ": " << eachReview->rating << ": " << eachReview->comment << endl;
         ++count;
         sum += eachReview->rating;
+        eachReview = eachReview->next;
     }
     cout << "\t> Average: " << fixed << setprecision(5) << sum / count << endl;
 
@@ -108,7 +112,7 @@ void push_back(Review* &head, float rating, string comment) {
         // link the new node to the end of the list
         current->next = newnode;
     }
-    else { // the list is empty; make head point to this new node
+    else { // if the list is empty, make this new node is the first item
         head = newnode;
     }
 }
