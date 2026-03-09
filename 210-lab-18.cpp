@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ int main() {
     }
     // Obtain two pieces of data from the user, the rating and the comments. Store these in the linked list.
     // start the linked list
-    Review* head = nullptr;
+    Review* reviews = nullptr;
     string sRating;
     float fRating;
     string comment;
@@ -57,23 +58,33 @@ int main() {
         cin.ignore();
         getline(cin, comment);
         if(iChoice == 1)
-            push_front(head, fRating, comment);
+            push_front(reviews, fRating, comment);
         else
-            push_back(head, fRating, comment);
+            push_back(reviews, fRating, comment);
         cout << "Enter another review? Y/N: ";
     }
 
     // After all reviews have been input, traverse the linked list to output the data and calculate/output the average review.
+    cout << "Outputting all reviews:" << endl;
+    Review* eachReview = reviews;
+    int count = 1;
+    float sum = 0;
+    while (eachReview) {
+        cout << "\t> Review #" << count << ": " << eachReview->rating << ": " << eachReview->comment << endl;
+        ++count;
+        sum += eachReview->rating;
+    }
+    cout << "\t> Average: " << fixed << setprecision(5) << sum / count << endl;
 
     // delete the list to deallocate the memory
     // (I know the program is ending anyway but this is good practice)
-    Review* current = head;
+    Review* current = reviews;
     while (current) {
-        head = current->next;
+        reviews = current->next;
         delete current;
-        current = head;
+        current = reviews;
     }
-    head = nullptr;
+    reviews = nullptr;
 
     return 0;
 }
@@ -82,20 +93,22 @@ void push_front(Review* &ptr, float rating, string comment) {
 // TODO add code from example
 }
 
-void push_back(Review* &ptr, float rating, string comment) {
-    if (ptr) { // if the list is not empty
+void push_back(Review* &head, float rating, string comment) {
+    // make the new node
+    Review* newnode = new Review;
+    newnode->rating = rating;
+    newnode->comment = comment;
+    newnode->next = nullptr;
+    if (head) { // if the list is not empty
         // traverse the list to get to the last node
-        Review* current = ptr;
+        Review* current = head;
         while (current->next != nullptr) {
             current = current->next;
         }
-        // make the new node
-        Review* newnode = new Review;
-
         // link the new node to the end of the list
-        
+        current->next = newnode;
     }
-    else {
-
+    else { // the list is empty; make head point to this new node
+        head = newnode;
     }
 }
